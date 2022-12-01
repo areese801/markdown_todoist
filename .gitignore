@@ -1,0 +1,17 @@
+# Ignore patterns for git.
+# See:  https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# Don't track Jetbrains Pycharm / Fleet stuff
+.idea/
+.fleet/
+
+# Don't track .DS_Store (Mac Temp file)
+.DS_Store
+
+# Don't track __pycache__ folders
+*__pycache__
+
+# Don't track virtual environment subdirectories
+virtualenv/
+.venv/
+venv/
