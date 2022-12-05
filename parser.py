@@ -101,7 +101,7 @@ def parse_lines(input_data: str|list, regex_pattern:str=None) -> list|None:
     all_todo_matches = []
     for line in input_data:
 
-        if not line:
+        if line.strip() == "":
             continue
 
         todo_match = parse_string(input_string=line, regex_pattern=regex_pattern)
@@ -140,10 +140,6 @@ def process_file(file_name: str, regex_pattern:str=None) -> list | None:
         file_inode = os.stat(file_name).st_ino
 
         # Get the mac address of the machine running this code.  This along with file_inode can be used as a key
-
-        print("!")
-
-
 
     return tasks
 
