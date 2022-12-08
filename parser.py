@@ -143,14 +143,19 @@ def process_file(file_name: str, obsidian_vault_root:str=None, regex_pattern:str
         # Create Obsidian URI.  See:  https://help.obsidian.md/Advanced+topics/Using+obsidian+URI
         vault_escaped = urllib.parse.quote(obsidian_vault_root, safe="")
         uri_escaped = urllib.parse.quote(note_name, safe="")
-        # obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"
-        obsidian_uri = f"obsidian://open?vault={vault_escaped}&file={urllib.parse.quote(note_name,safe='')}"
-        print(f"\n{len(tasks)} To-Do Items from:  {note_name}")
-        print(f"\tPath to Note:  {file_name}")
-        print(f"\tObsidian URI:  {obsidian_uri}")
+        obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"
+        # obsidian_uri = f"obsidian://open?vault={vault_escaped}&file={urllib.parse.quote(note_name,safe='')}"
+        print("=" * 200)
+        print(f"\n{len(tasks)} To-Do Items from:  [{note_name}]")
+        print(f"\tPath to Note:  [{file_name}]")
+        print(f"\tObsidian URI:  [{obsidian_uri}]")
+
 
         for t in tasks:
-            print(f"\t□ {t['task']}") # That's a 'white square' just for visual reasons.  See:  https://www.alt-codes.net/square-symbols
+            print(f"\t\t□ {t['task']}") # That's a 'white square' just for visual reasons.  See:  https://www.alt-codes.net/square-symbols
+
+        # print("=" * max(len(note_name),len(file_name), len(obsidian_uri)))
+
 
         # Get the inode of the file.  The reason is that we want to be resilient against a file being moved or renamed
         file_inode = os.stat(file_name).st_ino
