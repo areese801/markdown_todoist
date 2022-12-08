@@ -4,8 +4,7 @@ This module contains functions for parsing (potential) todo items out of markdow
 import os.path
 import re
 import sys
-
-
+import urllib.parse
 INCOMPLETE_MARKDOWN_TODO_REGEX_PATTERN = "(^\s*- \[ \]\s+)(.*$)"
 
 def parse_string(input_string:str, regex_pattern:str=None) -> dict | str:
@@ -114,10 +113,16 @@ def parse_lines(input_data: str|list, regex_pattern:str=None) -> list|None:
     else:
         return all_todo_matches
 
-def process_file(file_name: str, regex_pattern:str=None) -> list | None:
+def process_file(file_name: str, obsidian_vault_root:str=None, regex_pattern:str=None) -> list | None:
     """
 
     Args:
+        obsidian_vault_root: A string to the parent path of the obsidian vault.
+            Used to construct URIs to open specific files.
+            See:   https://help.obsidian.md/Advanced+topics/Using+obsidian+URI#Action+open
+            If the user isn't actually using Obsidian, but just a generic folder full of other folders and markdwodn
+            files than the calculated value will be the 'would-be' URI to that file had the user started to use
+            Obsidian.
         file_name:  The file name we wish to look for / parse to-do items from
         regex_pattern: A regex pattern to pass into parse_lines. If not passed, the default will be used (recommended)
     Returns: a dictionary object with any to-do items found
@@ -132,9 +137,20 @@ def process_file(file_name: str, regex_pattern:str=None) -> list | None:
 
     # print what we found, if anything
     if tasks is not None:
-        print(f"\nParsed Open To-Do Items from the file '{file_name}':")
+        # Get note name from fully qualified path.  It's the short file name with the '.md' extension removed
+        note_name = re.sub(pattern=r'.md$', repl='', string=os.path.basename(file_name))
+
+        # Create Obsidian URI.  See:  https://help.obsidian.md/Advanced+topics/Using+obsidian+URI
+        vault_escaped = urllib.parse.quote(obsidian_vault_root, safe="")
+        uri_escaped = urllib.parse.quote(note_name, safe="")
+        # obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"
+        obsidian_uri = f"obsidian://open?vault={vault_escaped}&file={urllib.parse.quote(note_name,safe='')}"
+        print(f"\n{len(tasks)} To-Do Items from:  {note_name}")
+        print(f"\tPath to Note:  {file_name}")
+        print(f"\tObsidian URI:  {obsidian_uri}")
+
         for t in tasks:
-            print(f"\t{t['task']}")
+            print(f"\t□ {t['task']}") # That's a 'white square' just for visual reasons.  See:  https://www.alt-codes.net/square-symbols
 
         # Get the inode of the file.  The reason is that we want to be resilient against a file being moved or renamed
         file_inode = os.stat(file_name).st_ino
@@ -207,7 +223,7 @@ def scan_files(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
             if file_ext_match is True:
                 long_file_name = os.path.join(root, short_file_name)
 
-                process_file(file_name=long_file_name)
+                process_file(file_name=long_file_name, obsidian_vault_root=f"Obsidian Remote Vault")
 
 if __name__ == '__main__':
     # base_dir = os.path.realpath(os.path.expanduser("~/Obsidian"))
