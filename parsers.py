@@ -88,6 +88,8 @@ def _parse_string(input_string:str) -> dict | str:
     regex_match = re.match(string=input_string, pattern=todo_regex_pattern)
     if regex_match is not None:
 
+        original_string = input_string
+        markdown_part = regex_match.group(1)  # We avoid strip here to maintain indentation in the migration module
         task_part = regex_match.group(2).strip()
 
         # Remove #hashtags from the string.  Keep in mind that # signifies a project in todoist.  @ signifies tags
@@ -95,12 +97,14 @@ def _parse_string(input_string:str) -> dict | str:
         for c in drop_chars:
             task_part = task_part.replace(c, '')
 
-        task_name_id_part = re.sub(r'\W', '', re.sub(r' +', '_', task_part.lower()))
-
         task_description_for_hash = re.sub(r'[^a-z0-9]', '', task_part.lower()) # Keep numbers and letters, lowercased
         task_md5_hash = hashlib.md5(bytes(str(f"{task_description_for_hash}"),encoding='utf-8')).hexdigest()
 
-        ret_val =  dict(task=task_part, task_md5_hash=task_md5_hash)
+        ret_val =  dict(markdown_part=markdown_part,
+                        task=task_part,
+                        task_description_for_hash=task_description_for_hash,
+                        task_md5_hash=task_md5_hash,
+                        original_string=original_string)
     else:
         ret_val = None
 

@@ -17,12 +17,6 @@ def _find_tasks_in_file(file_name: str) -> list | None:
     """
 
     Args:
-        obsidian_vault_root: A string to the parent path of the obsidian vault.
-            Used to construct URIs to open specific files.
-            See:   https://help.obsidian.md/Advanced+topics/Using+obsidian+URI#Action+open
-            If the user isn't actually using Obsidian, but just a generic folder full of other folders and markdwodn
-            files than the calculated value will be the 'would-be' URI to that file had the user started to use
-            Obsidian.
         file_name:  The file name we wish to look for / parse to-do items from
     Returns: a dictionary object with any to-do items found
     """
@@ -50,7 +44,7 @@ def _find_tasks_in_file(file_name: str) -> list | None:
 
     # Create Obsidian URI.  See:  https://help.obsidian.md/Advanced+topics/Using+obsidian+URI
     obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"
-    file_name_escaped = file_name.replace(' ', f'\ ')
+    file_name_escaped = file_name.replace(' ', '\ ')
 
     # Print some nice messages about what we found
     print(f"\nFound {len(tasks)} To-Do items in note: '{note_name}'")
@@ -63,6 +57,9 @@ def _find_tasks_in_file(file_name: str) -> list | None:
         task['from_file_inode'] = file_inode
         task['from_mac_address'] = mac_address
         task['from_hostname'] = host_name
+        task['file_name'] = file_name
+        task['file_name_escaped'] = file_name_escaped  # This shows double escaped in json output
+        task['obsidian_uri'] = obsidian_uri
 
         print(f"To-Do:  '{task['task']}'") # That's a 'white square' just for visual reasons.  See:  https://www.alt-codes.net/square-symbols
 
@@ -77,6 +74,8 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
         file_ext: a string or list of file extensions to parse for to-do items within
     Returns: A dict describing all found matches
     """
+
+    # TODO:  Read the parent directory path out of a config file
 
     """
     Handle parent directory
@@ -158,7 +157,4 @@ if __name__ == '__main__':
     # base_dir = os.path.realpath(os.path.expanduser("~/Obsidian"))
     # scan_files(parent_directory=base_dir)
     todo_items = find_tasks()
-
-    if todo_items is not None:
-        print(json.dumps(todo_items, indent=2))
 
