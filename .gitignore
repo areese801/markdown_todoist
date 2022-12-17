@@ -18,6 +18,6 @@ venv/
 
 # Ignore a file called todoist_api_config.json because
 # The template file todoist_api_config_TEMPLATE.json
-# suggests that config with the todoist API key
+# suggests that config with the todoist API token
 # Is kept in a file with that name.
 todoist_api_config.json

@@ -4,14 +4,14 @@
 // However, the JSON object below is valid. You can use it to make your own
 // todoist_api_config.json file. 
 
-// Since the file will contain an API key, which is sensitive, youll need to 
+// Since the file will contain an API token, which is sensitive, youll need to 
 // make damn sure  that you NEVER, EVER put it under version control.  As 
 // such, the author of this package Suggests that you do use the name 
 // todoist_api_config.json which has a corresponding entry in the
 // .gitignore file. 
 
-// Moreover, consider supplying not the API key itself, but a fully qualified 
-// path to that key Somewhere on the local machine that is not a part of this
+// Moreover, consider supplying not the API token itself, but a fully qualified 
+// path to that token Somewhere on the local machine that is not a part of this
 // git repository (or any other..)
 
 // For the paranoid, consider changing the permission bits on that file to 400
@@ -24,7 +24,7 @@
 
 {
 	"todoist_api_config": {
-		"todoist_api_key": "Todoist API key, or better yet, a path to a well-locked-down file with that key in it, outside of this repository goes here"
+		"todoist_api_token": "Todoist API token, or better yet, a path to a well-locked-down file with that token in it, outside of this repository goes here"
 	}
 
 }
