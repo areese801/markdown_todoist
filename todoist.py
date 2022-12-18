@@ -80,6 +80,53 @@ def get_api_token(todoist_api_config_file: str = 'config/todoist_api_config.json
 
     return todoist_api_token
 
+def create_task(todoist_api_token:str, task_content:str, task_description:str = None, due_string:str = "Today") -> str:
+    """
+    Creates a task in todoist and returns the URL for that task
+    Note that the create method for the API takes a lot of optional parameters
+    This function could be refactored to handle for those should the need arise.
+
+    If you're reading this and feel like contributing, feel free to submit a pull request!
+
+    See:  https://developer.todoist.com/rest/v2/?python#create-a-new-task
+
+    Args:
+        task_content (String):  Not the best name, but corresponds with the API documentation.
+            This is the DESCRIPTION of the task itself.  Example:  "Feed the dog"
+        task_description (string):  Not the best name, but corresponds with the API documentation.
+            This is the ADDITIONAL, optional 'flavor text' so to speak.  Example "...and him a treat cause you love him"
+        due_string: "A natural language string that tells the todoist API when a task is due"
+            More Details here:  https://todoist.com/help/articles/due-dates-and-times
+        todoist_api_token:  The token, required to interact with todoist API
+
+
+    Returns: A string, which is the URL to the created task
+    """
+
+    # Create the payload to pass to the API
+    data = dict(content=task_content)
+
+    # Bake in the task description of a truth string was passed in
+    if task_description:
+        data['description'] = str(task_description)
+
+    # Bake in the task due string, if some value was passed in.  We'll hope it's valid
+    # We'll rely on the API itself to return an error if its rubbish
+    if due_string:
+        data['due_string'] = str(due_string)
+
+    # init API
+    api = TodoistAPI(todoist_api_token)
+    try:
+        task = api.add_task(**data)
+    except Exception as ex:
+        print(f"Encountered exception of type {type(ex)} while trying to create a task with todoist with the payload:"
+              f" {data}\n{ex}", file=sys.stderr)
+        return ex
+
+    return task
+
+
 
 if __name__ == '__main__':
 

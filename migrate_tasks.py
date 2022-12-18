@@ -9,11 +9,15 @@ convention to denote those having been migrated.  This approach allows me to
 avoid duplications, forget about tracking file names and locations, and
 take advantage of the very nature of sync.
 """
+import os.path
+import sys
+
 import todoist
 from find_tasks import find_tasks
 import re
-from todoist import get_api_token
-from todoist import get_todoist_tasks
+import datetime
+from datetime import timezone
+from parsers import make_task_hash
 
 def migrate_tasks(parent_directory:str = '~/Obsidian'):
 	"""
@@ -36,11 +40,57 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 
 	for task_dict in tasks_from_markdown_files:
 
-		# TODO:  Ship the task into todoist here
-		# Todo: Check the last modified stamp on the file.  Maybe ignore modified within the last minute
-		#   Idea is to avoid making tasks in todoist that are currently being typed out
+		"""
+		Check the last modified time of the file.  If it's less than X seconds ago, don't bother with it
+		The idea here is to not ship incomplete to-do items that the user might still by typing out into to
+		Todoist prematurely.  For example, if this program was scheduled on a cron job
+		"""
 
-		todoist_task_url = "http://foo.bar"  #TODO:  Replace this kludge with something real
+		# take note of the current timestamp in UTC
+		right_now_utc_timestamp = datetime.datetime.now(timezone.utc).timestamp()
+
+		# take note of the timestamp on the file
+		file_last_modified_timestamp = os.path.getmtime(task_dict['file_name'])
+
+		time_diff_sec = right_now_utc_timestamp - file_last_modified_timestamp
+		if file_last_modified_timestamp > right_now_utc_timestamp or time_diff_sec < 120:
+			# TODO:  Read this seconds threshold out of a config file and allow the user bypass this behavior entirely
+			# File is too new.  Skip it for now
+			continue
+
+		"""
+		For good measure, bump the list of existing tasks from todoist up against that which is in scope right now
+		"""
+		markdown_task_md5_hash = task_dict['task_md5_hash']
+		matching_task_in_todoist = False
+		for tdt in todoist_tasks:
+			todoist_task_md5_hash = make_task_hash(task_description=tdt.content)
+			if todoist_task_md5_hash == markdown_task_md5_hash:
+				matching_task_in_todoist = True
+				break
+
+		if matching_task_in_todoist is True:
+			print(f"The task parsed from a markdown file '{task_dict['task']}' seems to be a duplicate of a task"
+			      f" that already exists in todoist, '{tdt.content}'.  As such, it will be skipped over.", file=sys.stderr)
+			continue
+
+		"""
+		Make the task in todoist.  This is the moment we've been waiting for!
+		"""
+		task_content = task_dict['task']
+		original_file_name = os.path.basename(task_dict['file_name'])
+		task_description = f"This todo item was parsed from [{original_file_name}]({task_dict['obsidian_uri']}). " \
+		               f"Note that this link may be broken if the file was renamed or moved."
+
+
+		new_todoist_task = todoist.create_task(todoist_api_token=todoist_api_token,
+		                                       task_content=task_content,
+		                                       task_description=task_description)
+		if new_todoist_task is Exception:
+			raise new_todoist_task
+		else:
+			todoist_task_url = new_todoist_task.url
+
 
 		"""
 		Construct a markdown string to replace the original with
@@ -67,8 +117,11 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 		print(f"\tWithin the file '{task_dict['file_name']}'")
 		print(f"\tThis string will be sought:            {task_dict['original_string']}")
 		print(f"\tWhich will be replaced by the string:  {replacement_todo_string}")
+		print("!")
 
 
+		# To Do:  Cross out the todo in the markdown file
+		# Pick back up here next time
 		# TODO:  After buttoning up the piece that would create the todoist task
 		# Modify the markdown file here.
 		# Make it create a .backup file with the original contents and a datestamp
