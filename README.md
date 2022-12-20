@@ -7,8 +7,10 @@ If you want to be able to create To-Do items in markdown syntax in your note fil
 
 In other words:  Type away, making your notes fast an furiously.  When a To-do item pops into your mind, no need to switch apps, just make your To-do item in your markdown file and stay in the zone.
 
-After trying it out, if you feel the urge, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801)
+After trying it out, if you feel the urge, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801) ☕️ ☕️ ☕️
 
+## Live Demo Video
+If you're a visual person, you can see this tool in action, [here on YouTube](https://www.youtube.com/watch?v=75H1IU0_tHo)
 
 ## Why would I want to use this?
 - Because notes kept in [Markdown](https://www.markdownguide.org/basic-syntax/) are very portable.  Since they're plain text, they're compatible with a wide variety of tools.
@@ -62,9 +64,28 @@ This tool was created on a Mac using Python3 (version 3.11).  It was tested on t
 
 # Setup
 
+## Get the latest version of the code
+Clone or Download and Extract the code from the repository to your preferred destination (`~/scripts` is a good spot if you're not sure where else to put it)
+
+## Configure config files
+There are 2 config files you'll need to create under the `config` folder:
+- `config.json` which contains config for the program itself
+- `todoist_api_config.json` which contains your API token (Sensitive.  Treat it as such)
+
+### Configure `config.json`
+- As of this writing (2022-12-20), the only thing to configure in this file is the base directory (for example:  `~/Obsidian`) where markdown files and subdirectories with more markdown files can be found.
+- See [config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/config_TEMPLATE.json) to understand how the file should be formatted
+- Make a copy of the file and remove the comments to make it valid JSON
+
+### Configure `todoist_api_config.json`
 - You'll have to create a configuration file with your Todoist API key in it.
 	- See [todoist_api_config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/todoist_api_config_TEMPLATE.json "todoist_api_config_TEMPLATE.json") to understand how that should be formatted.
 	- Take heed to the notes at the top of that file regarding your API token
+	- Make a copy of the file and remove the comments to make it valid JSON.
+	- Enter your Todoist API Token
+		- To find this in Todoist:  `Settings > Integrations > Developer > API Token`
+
+### Python Virtual Environment (Optional)
 - The package uses [todoist-api-python](https://pypi.org/project/todoist-api-python/) under the hood so that needs to be installed and available to whichever Python3 installation or virtual environment you use
 	- You may find [make_env.sh](https://gist.github.com/areese801/e51773aefa16a826459aba075c852630) useful for setting up a Python Virtual Environment, but YMMV
 
@@ -135,11 +156,8 @@ Note that the migrated task is technically
 # Work to be Done
 - [→] ~~Create a demo video showing Markdown Todoist in action~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453762303)
 - [→] ~~Create Obsidian Message Board post about what changes to files (rename / move) would or would not break the URI Scheme~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880349)
-- [→] ~~Make Github Repo for Markdown Todoist public~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880375)
 - [→] ~~Create functionality to replace migrated tasks (with `→` character) with completed tasks (with `x` character, to follow convention) after a check on todoist to see if that task's state has changed to complete~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880392)
-- [→] ~~Check "TODO" notes in Pycharm and resolve these (Parameterize config items)~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880408)
-- [ ] Finish filling out the 'Installation Section' (Describe git clone or extract somewhere)
-- [ ] Parameterize Vault Path
+- [→] ~~Finish filling out the 'Installation Section' (Describe git clone or extract somewhere)~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6454194245)
 👆 - This is all a little meta, but is from real world use.
 
 
