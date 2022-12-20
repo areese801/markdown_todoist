@@ -1,0 +1,13 @@
+// This is not a valid JSON file, due to the very comments youre reading right
+// now. 
+
+// However, the JSON object below is valid. You can use it to make your own
+// config.json file. 
+
+
+{
+	"config": {
+		"markdown_base_directory": "/path/to/all/of/your/markdown/notes"
+	}
+
+}

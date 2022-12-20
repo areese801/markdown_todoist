@@ -1,15 +1,14 @@
 """
 This module contains functions for parsing (potential) todo items out of markdown
 """
-import json
 import os.path
 import re
+import sys
 import urllib.parse
-import getpass
 import socket
 import uuid
 
-
+from config import _read_base_dir_from_config
 from parsers import parse_strings
 
 
@@ -75,7 +74,7 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
     Returns: A dict describing all found matches
     """
 
-    # TODO:  Read the parent directory path out of a config file
+
 
     """
     Handle parent directory
@@ -85,7 +84,9 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
     parent_directory = os.path.realpath(os.path.expanduser(parent_directory))
 
     if not os.path.isdir(parent_directory):
-        raise FileNotFoundError(f"The parent_directory argument '${parent_directory}' does not exist!")
+        raise FileNotFoundError(f"The parent_directory argument '{parent_directory}' does not exist!")
+    else:
+        print(f"Files will be sought under the path '{parent_directory}'")
 
     """
     Handle file_extension(s)
@@ -154,7 +155,14 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
 
 
 if __name__ == '__main__':
-    # base_dir = os.path.realpath(os.path.expanduser("~/Obsidian"))
-    # scan_files(parent_directory=base_dir)
-    todo_items = find_tasks()
+
+    # Resolve the path to the vault.  If it's not passed in, get it from the config file
+    args = sys.argv
+    if len(args) >= 2:
+        base_dir = args[1]
+    else:
+        base_dir = _read_base_dir_from_config()
+
+
+    todo_items = find_tasks(parent_directory=base_dir)
 

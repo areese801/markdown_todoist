@@ -21,3 +21,7 @@ venv/
 # suggests that config with the todoist API token
 # Is kept in a file with that name.
 todoist_api_config.json
+
+# Ignore config.json.  Users sould refer to config_TEMPLATE.json
+# to make their own config.json
+config.json

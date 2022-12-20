@@ -9,16 +9,19 @@ convention to denote those having been migrated.  This approach allows me to
 avoid duplications, forget about tracking file names and locations, and
 take advantage of the very nature of sync.
 """
+
 import os.path
 import sys
 import shutil
 
 import todoist
 from find_tasks import find_tasks
+from config import _read_base_dir_from_config
 import re
 import datetime
 from datetime import timezone
 from parsers import make_task_hash
+
 
 def migrate_tasks(parent_directory:str = '~/Obsidian'):
 	"""
@@ -90,8 +93,8 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 		"""
 		task_content = task_dict['task']
 		original_file_name = os.path.basename(markdown_file_name)
-		task_description = f"This todo item was parsed from [{original_file_name}]({task_dict['obsidian_uri']}). " \
-		               f"Note that this link may be broken if the file was renamed or moved."
+		task_description = f"Migrated from [{original_file_name}]({task_dict['obsidian_uri']}). " \
+		               f"(Link may break if file was renamed or moved.)"  #TODO:  Make a post on message board to try to uinderstand this behavior
 
 
 		new_todoist_task = todoist.create_task(todoist_api_token=todoist_api_token,
@@ -131,12 +134,12 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 
 		# Create a backup copy of the file before modifying it
 		#TODO:  Probably safe to comment this out or disable via config after having used this tool for a while
-		backup_file_name = f"{markdown_file_name}.{right_now.strftime('%Y-%m-%d')}.bak"
-		if not os.path.isfile(backup_file_name):
-			shutil.copy(src=markdown_file_name, dst=backup_file_name)
-			print(f"Created a backup file before modifying to-do item in place in the original.  Backup file name is:  '{backup_file_name}'")
-		else:
-			print(f"A backup file '{backup_file_name}' already exists.  Will not create another backup file")
+		# backup_file_name = f"{markdown_file_name}.{right_now.strftime('%Y-%m-%d')}.bak"
+		# if not os.path.isfile(backup_file_name):
+		# 	shutil.copy(src=markdown_file_name, dst=backup_file_name)
+		# 	print(f"Created a backup file before modifying to-do item in place in the original.  Backup file name is:  '{backup_file_name}'")
+		# else:
+		# 	print(f"A backup file '{backup_file_name}' already exists.  Will not create another backup file")
 
 		"""
 		Replace the original line in the file with a to-do item on it with the new field that 
@@ -149,7 +152,7 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 		# Modify the lines
 		new_lines = []
 		for line in lines:
-			if line.startswith(task_dict['original_string']):
+			if line.strip().startswith(task_dict['original_string']):
 				new_lines.append(replacement_todo_string)
 			else:
 				new_lines.append(line.rstrip())  # We don't want trailing \n char or we'll get doubles when we join
@@ -170,6 +173,17 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 
 
 if __name__ == '__main__':
-	data = migrate_tasks()
-	print("!")
+
+	# Resolve the path to the vault.  If it's not passed in, get it from the config file
+	args = sys.argv
+
+	if len(args) >= 2:
+		base_dir = args[1]
+	else:
+		base_dir = _read_base_dir_from_config()
+
+	migrate_tasks(parent_directory=base_dir)
+
+
+
 
