@@ -133,21 +133,21 @@ When a task is "migrated", this tool modifies the markdown file that that task w
 
 So a task that looks like this, pre-migration:
 
-![](./_resources/Pasted image 20221220110643.png)
+![](./_resources/Pasted image 20221220110643.png?raw=true)
 
 Will end up looking like this, post-migration:
 
-![](./_resources/Pasted image 20221220110655.png)
+![](./_resources/Pasted image 20221220110655.png?raw=true)
 
 Visually, in Obsidian the syntax from the screen prints above renders like this, before and after
 Before:
-![](./_resources/Pasted image 20221220110918.png)
+![](./_resources/Pasted image 20221220110918.png?raw=true)
 
 After:
-![](./_resources/Pasted image 20221220110807.png)
+![](./_resources/Pasted image 20221220110807.png?raw=true)
 
 Here's what the generated task in Todoist Looks like:
-![](./_resources/Pasted image 20221220110455.png)
+![](./_resources/Pasted image 20221220110455.png?raw=true)
 
 
 
