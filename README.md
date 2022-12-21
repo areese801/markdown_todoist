@@ -1,7 +1,3 @@
-# Did you save time or money by using this tool?
-
-If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801).  😎
-
 # Use Case
 If you want to be able to create To-Do items in markdown syntax in your note files (e.g. Notes created with [Obsidian](https://obsidian.md/)), but have those materialize in [Todoist](https://todoist.com/) then this package is for you.
 
@@ -136,31 +132,32 @@ This was tested with Obsidian Sync and it worked fine.
 When a task is "migrated", this tool modifies the markdown file that that task was parsed from on-the-fly.
 
 So a task that looks like this, pre-migration:
-![[Pasted image 20221220110643.png]]
 
-Will end up looking like this, post-migration
-![[Pasted image 20221220110655.png]]
+![](./_resources/Pasted image 20221220110643.png)
+
+Will end up looking like this, post-migration:
+
+![](./_resources/Pasted image 20221220110655.png)
 
 Visually, in Obsidian the syntax from the screen prints above renders like this, before and after
 Before:
-![[Pasted image 20221220110918.png]]
+![](./_resources/Pasted image 20221220110918.png)
 
 After:
-![[Pasted image 20221220110807.png]]
+![](./_resources/Pasted image 20221220110807.png)
 
 Here's what the generated task in Todoist Looks like:
-![[Pasted image 20221220110455.png]]
+![](./_resources/Pasted image 20221220110455.png)
+
+
 
 Note that the migrated task is technically
 
 # Work to be Done
-- [→] ~~Create a demo video showing Markdown Todoist in action~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453762303)
-- [→] ~~Create Obsidian Message Board post about what changes to files (rename / move) would or would not break the URI Scheme~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880349)
 - [→] ~~Create functionality to replace migrated tasks (with `→` character) with completed tasks (with `x` character, to follow convention) after a check on todoist to see if that task's state has changed to complete~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880392)
-- [→] ~~Finish filling out the 'Installation Section' (Describe git clone or extract somewhere)~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6454194245)
 👆 - This is all a little meta, but is from real world use.
 
 
 # Did you save time or money by using this tool?
 
-If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801).
+If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801).
