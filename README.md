@@ -24,10 +24,10 @@ At the end of the day, nothing happening within this tool is terribly complex so
 
 ## This tool is not a copy of [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin)
 
-I've tried out the popular [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin), by [jamiebrynes7](https://github.com/jamiebrynes7) which I think is really great.  Markdown Todoist is slightly different however, in that it's more of a Batch Load of parsed tasks rather than a view into todoist Views.  I think these tools probably complement each other for different use cases.
+I've tried out the popular [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin), by [jamiebrynes7](https://github.com/jamiebrynes7) which I think is really great.  Markdown Todoist is slightly different however, in that it's more of a Batch Load of parsed tasks rather than a view into todoist Filters.  I think these tools probably complement each other for different use cases.
 
 ## This tool is not an Obsidian Plugin, for now
-This tool is **Not** an [Obsidian Plugin](https://help.obsidian.md/Advanced+topics/Community+plugins).  The Primary reason for this is that [the original author](https://github.com/areese801) is better with Python that Javascript.  The original intention was to get things working with Python, as described throughout the rest of this document, then translate all of that into a "Version 2" in the form of an obsidian plugin.
+This tool is **Not** an [Obsidian Plugin](https://help.obsidian.md/Advanced+topics/Community+plugins).  The Primary reason for this is that [the original author](https://github.com/areese801) is better with Python that Javascript.  The original intention was to get things working with Python, as described throughout the rest of this document, then translate all of that into a "Version 2" in the form of an Obsidian plugin.
 
 At this point, that may or may not happen.  Reason being that it could be argued that this tool is better off as a standalone code package and that the lack of tight integration with Obsidian is a feature ~~, not a bug~~ because it allows the tool to work with arbitrary Markdown files anywhere on the file system and also makes automation easy to implement (See Automation section below), which might be harder to do (or impossible?  ... I haven't looked closely enough) as an Obsidian Plugin
 
@@ -62,9 +62,34 @@ This tool was created on a Mac using Python3 (version 3.11).  It was tested on t
 
 # Setup
 
+<<<<<<< Updated upstream
 - You'll have to create a configuration file with your Todoist API key in it.
 	- See [todoist_api_config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/todoist_api_config_TEMPLATE.json "todoist_api_config_TEMPLATE.json") to understand how that should be formatted.
 	- Take heed to the notes at the top of that file regarding your API token
+=======
+## Get the latest version of the code
+Clone or Download and Extract the code from the repository to your preferred destination (`~/scripts` is a good spot if you're not sure where else to put it)
+
+## Configure config files
+There are 2 config files you'll need to create under the `config` folder:
+- `config.json` which contains config for the program itself
+- `todoist_api_config.json` which contains your API token (Sensitive.  Treat it as such)
+
+### Configure `config.json`
+- As of this writing (2022-12-20), the only thing to configure in this file is the base directory (for example:  `~/Obsidian`) where markdown files and subdirectories with more markdown files can be found.
+- See [config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/config_TEMPLATE.json) to understand how the file should be formatted
+- Make a copy of the file and remove the comments to make it valid JSON
+
+### Configure `todoist_api_config.json`
+- You'll have to create a configuration file with your Todoist API token in it.
+	- See [todoist_api_config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/todoist_api_config_TEMPLATE.json "todoist_api_config_TEMPLATE.json") to understand how that should be formatted.
+	- Take heed to the notes at the top of that file regarding your API token
+	- Make a copy of the file and remove the comments to make it valid JSON.
+	- Enter your Todoist API Token
+		- To find this in Todoist:  `Settings > Integrations > Developer > API Token`
+
+### Python Dependencies
+>>>>>>> Stashed changes
 - The package uses [todoist-api-python](https://pypi.org/project/todoist-api-python/) under the hood so that needs to be installed and available to whichever Python3 installation or virtual environment you use
 	- You may find [make_env.sh](https://gist.github.com/areese801/e51773aefa16a826459aba075c852630) useful for setting up a Python Virtual Environment, but YMMV
 

@@ -31,18 +31,17 @@ def make_task_hash(task_description: str):
     """
 
     task_description_for_hash = re.sub(r'[^a-z0-9]', '', task_description.strip().lower()) # Keep numbers and letters, lowercased
-    task_md5_hash = hashlib.md5(bytes(str(f"{task_description_for_hash}"),encoding='utf-8')).hexdigest() #then, hash those
+    task_md5_hash = hashlib.md5(bytes(str(f"{task_description_for_hash}"),encoding='utf-8')).hexdigest() # Then, hash those
 
     return task_md5_hash
 
 
 def parse_strings(input_data: str | list) -> list | None:
     """
-    Passes each line in a string to parse_line (singular) and returns each of the matches
+    Parses each line in a string to parse_line (singular) and returns each of the matches
     Args:
         input_data: A string or list of strings (e.g. Markdown Syntax).  May or may not be multiple lines of text
-        regex_pattern: A regex pattern to pass into parse_lines. If not passed, the default will be used (recommended)
-    Returns:  #A list of dictionaries describing the matches or None, if none are found
+    Returns:  A list of dictionaries describing the matches or None, if none are found
     """
 
     """
