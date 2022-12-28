@@ -1,40 +1,34 @@
-# Did you save time or money by using this tool?
-
-If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801).  😎
-
 # Use Case
 If you want to be able to create To-Do items in markdown syntax in your note files (e.g. Notes created with [Obsidian](https://obsidian.md/)), but have those materialize in [Todoist](https://todoist.com/) then this package is for you.
 
 In other words:  Type away, making your notes fast an furiously.  When a To-do item pops into your mind, no need to switch apps, just make your To-do item in your markdown file and stay in the zone.
 
-After trying it out, if you feel the urge, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801)
+After trying it out, if you feel the urge, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801) ☕️ ☕️ ☕️
 
+## Live Demo Video
+If you're a visual person, you can see this tool in action, [here on YouTube](https://www.youtube.com/watch?v=75H1IU0_tHo)
 
-## Why would I want to use this?
+## Why would I want to use this utility?
 - Because notes kept in [Markdown](https://www.markdownguide.org/basic-syntax/) are very portable.  Since they're plain text, they're compatible with a wide variety of tools.
 	- This author's favorite tool is [Obsidian](https://obsidian.md/), but you're not limited to any one tool
 - Because while To-Do items in Markdown are nice, there's no denying the power of [Todoist](https://todoist.com/).  (Scheduling, Reminders, Tagging, Delegation, etc, etc)
 
 # What this tool is and what it is Not
 
-## This tool is new
-"It works on my computer", as they say, but I haven't tested it for all edge cases (strange Markdown Syntax or wording) so there may be some bugs.  I haven't tested it on Windows either.  If you'd like to help with that, please reach out.
-
-At the end of the day, nothing happening within this tool is terribly complex so it may not need much more refinement.  Still, there could be some bugs to work out.  Think of it as a "Version 0"
 
 ## This tool is not a copy of [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin)
 
-I've tried out the popular [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin), by [jamiebrynes7](https://github.com/jamiebrynes7) which I think is really great.  Markdown Todoist is slightly different however, in that it's more of a Batch Load of parsed tasks rather than a view into todoist Filters.  I think these tools probably complement each other for different use cases.
+I've tried out the popular [obsidian-todoist-plugin](https://github.com/jamiebrynes7/obsidian-todoist-plugin), by [jamiebrynes7](https://github.com/jamiebrynes7) which I think is really great.  Markdown Todoist is slightly different however, in that it's more of a Batch Load of parsed tasks rather than a view into todoist Views.  I think these tools probably complement each other for different use cases.
 
-## This tool is not an Obsidian Plugin, for now
-This tool is **Not** an [Obsidian Plugin](https://help.obsidian.md/Advanced+topics/Community+plugins).  The Primary reason for this is that [the original author](https://github.com/areese801) is better with Python that Javascript.  The original intention was to get things working with Python, as described throughout the rest of this document, then translate all of that into a "Version 2" in the form of an Obsidian plugin.
+## This tool is not an Obsidian Plugin, for now.  Perhaps never.
+This tool is **Not** an [Obsidian Plugin](https://help.obsidian.md/Advanced+topics/Community+plugins).  The Primary reason for this is that [the original author](https://github.com/areese801) is better with Python than Javascript.  The original intention was to get things working with Python, as described throughout the rest of this document, then translate all of that into a "Version 2" in the form of an Obsidian plugin.
 
 At this point, that may or may not happen.  Reason being that it could be argued that this tool is better off as a standalone code package and that the lack of tight integration with Obsidian is a feature ~~, not a bug~~ because it allows the tool to work with arbitrary Markdown files anywhere on the file system and also makes automation easy to implement (See Automation section below), which might be harder to do (or impossible?  ... I haven't looked closely enough) as an Obsidian Plugin
 
 ## This tool is basic when it comes to To-Do creation
 For now, there are no bells and whistles when it comes to Migrating tasks into Todoist.  There is no (intentional) handling for [Projects](https://todoist.com/help/articles/introduction-to-projects), [Labels](https://todoist.com/help/articles/introduction-to-labels), [Priorities](https://todoist.com/help/articles/introduction-to-priorities).  Todoist itself might gracefully handle some of these things based on how the task is worded, but there are no guarantees.
 
-For now, this tool has been built solely to shunt To-Do tasks into your [Default Project](https://todoist.com/help/articles/whats-the-difference-between-the-inbox-and-a-project) (.e.g Inbox), with "Today" as the Due Date so that you might go on to augment these tasks with Labels and Comments, change the due date, assign to a project, etc.
+Today, this tool will simply shunt To-Do tasks into your [Default Project](https://todoist.com/help/articles/whats-the-difference-between-the-inbox-and-a-project) (.e.g Inbox), with "Today" as the Due Date so that you might go on to augment these tasks with Labels and Comments, change the due date, assign to a project, etc.
 
 The notion comes from the [GTD Method](https://todoist.com/productivity-methods/getting-things-done).
 
@@ -55,20 +49,17 @@ At a high level, here's what happens:
 # Compatibility
 This tool was created on a Mac using Python3 (version 3.11).  It was tested on that Mac and worked fine there.  I would expect that this code work on Windows, but there may be some minor bugs as I didn't test for Windows.  If you care to do so and encounter an issue, please get in touch with [Adam Reese](https://github.com/areese801) and/or fix it yourself and create a pull request.
 
-# Prerequisites
+# Prerequisites and Dependencies
 - Python3 (This tool was originally developed and tested with Python 3.11)
 - A Todoist Account with Access to the [API](https://developer.todoist.com/guides/#developing-with-todoist)
 	- I believe the API is available to all [Pricing Tiers](https://todoist.com/pricing) of Todoist as of this writing (2022-12-20)
+- The package uses [todoist-api-python](https://pypi.org/project/todoist-api-python/) under the hood so that needs to be installed and available to whichever Python3 installation or virtual environment you use
+	- You may find [make_env.sh](https://gist.github.com/areese801/e51773aefa16a826459aba075c852630) useful for setting up a Python Virtual Environment, but YMMV
 
 # Setup
 
-<<<<<<< Updated upstream
-- You'll have to create a configuration file with your Todoist API key in it.
-	- See [todoist_api_config_TEMPLATE.json](https://github.com/areese801/markdown_todoist/blob/main/config/todoist_api_config_TEMPLATE.json "todoist_api_config_TEMPLATE.json") to understand how that should be formatted.
-	- Take heed to the notes at the top of that file regarding your API token
-=======
 ## Get the latest version of the code
-Clone or Download and Extract the code from the repository to your preferred destination (`~/scripts` is a good spot if you're not sure where else to put it)
+Clone or Download and Extract the code from the repository to your preferred destination. `~/scripts` is a good spot if you're not sure where else to put it.
 
 ## Configure config files
 There are 2 config files you'll need to create under the `config` folder:
@@ -87,11 +78,6 @@ There are 2 config files you'll need to create under the `config` folder:
 	- Make a copy of the file and remove the comments to make it valid JSON.
 	- Enter your Todoist API Token
 		- To find this in Todoist:  `Settings > Integrations > Developer > API Token`
-
-### Python Dependencies
->>>>>>> Stashed changes
-- The package uses [todoist-api-python](https://pypi.org/project/todoist-api-python/) under the hood so that needs to be installed and available to whichever Python3 installation or virtual environment you use
-	- You may find [make_env.sh](https://gist.github.com/areese801/e51773aefa16a826459aba075c852630) useful for setting up a Python Virtual Environment, but YMMV
 
 # Using the tool (Manually)
 
@@ -140,33 +126,21 @@ This was tested with Obsidian Sync and it worked fine.
 When a task is "migrated", this tool modifies the markdown file that that task was parsed from on-the-fly.
 
 So a task that looks like this, pre-migration:
-![[Pasted image 20221220110643.png]]
+![](./_resources/Pasted%20image%2020221220110643.png)
 
-Will end up looking like this, post-migration
-![[Pasted image 20221220110655.png]]
+Will end up looking like this, post-migration:
+
+![](./_resources/Pasted%20image%2020221220110655.png)
 
 Visually, in Obsidian the syntax from the screen prints above renders like this, before and after
 Before:
-![[Pasted image 20221220110918.png]]
+![](./_resources/Pasted%20image%2020221220110918.png)
 
 After:
-![[Pasted image 20221220110807.png]]
+![](./_resources/Pasted%20image%2020221220110807.png)
 
 Here's what the generated task in Todoist Looks like:
-![[Pasted image 20221220110455.png]]
-
-Note that the migrated task is technically
-
-# Work to be Done
-- [→] ~~Create a demo video showing Markdown Todoist in action~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453762303)
-- [→] ~~Create Obsidian Message Board post about what changes to files (rename / move) would or would not break the URI Scheme~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880349)
-- [→] ~~Make Github Repo for Markdown Todoist public~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880375)
-- [→] ~~Create functionality to replace migrated tasks (with `→` character) with completed tasks (with `x` character, to follow convention) after a check on todoist to see if that task's state has changed to complete~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880392)
-- [→] ~~Check "TODO" notes in Pycharm and resolve these (Parameterize config items)~~ [(This Task Migrated to Todoist)](https://todoist.com/showTask?id=6453880408)
-- [ ] Finish filling out the 'Installation Section' (Describe git clone or extract somewhere)
-- [ ] Parameterize Vault Path
-👆 - This is all a little meta, but is from real world use.
-
+![](./_resources/Pasted%20image%2020221220110455.png)
 
 # Did you save time or money by using this tool?
 
