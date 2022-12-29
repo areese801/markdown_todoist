@@ -11,7 +11,6 @@ import json
 from config import _read_api_token_from_file
 
 
-# Fetch tasks asynchronously
 def get_todoist_tasks(todoist_api_token:str):
     """
     Gets a list of all open tasks in todoist
