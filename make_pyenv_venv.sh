@@ -32,17 +32,6 @@ thisDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 	docmd "pyenv virtualenv ${latestStableInstalledPython} ${environmentName}" # Creates ~/.pyenv/versions/markdown_todoist
 
 ## Activate the virutal environment
-	
-	# These Evals help avoid an error like that below.  Ideally, the user will have these in their ~/.bashrc or ~/.zshrc files but we won't count on that
-	# See:  https://stackoverflow.com/questions/45577194/failed-to-activate-virtualenv-with-pyenv
-		# Failed to activate virtualenv.
-
-		# Perhaps pyenv-virtualenv has not been loaded into your shell properly.
-		# Please restart current shell and try again.
-
-		eval "$(pyenv init -)"  
-		eval "$(pyenv virtualenv-init -)"
-
 	docmd "pyenv local ${environmentName}"
 	docmd "pyenv activate ${environmentName}" # Documentation says:  "If you did not configure eval "$(pyenv virtualenv-init -)" to run in your shell, you can manually activate/deactivate your Python versions with this.  See:  https://realpython.com/intro-to-pyenv/#activating-your-versions
 	docmd "pyenv which python" #Proof!

@@ -74,8 +74,5 @@ thisDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 		echo '   eval "$(pyenv virtualenv-init -)"'
 		echo "------------------------------------------"
 
-	## A bit of kludge to help other scripts that call this one.  We won't rely on the user performing the steps above
-	# eval "$(pyenv init -)"  
-	# eval "$(pyenv virtualenv-init -)"
 
 	
