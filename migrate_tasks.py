@@ -20,7 +20,7 @@ from config import _read_base_dir_from_config
 import re
 import datetime
 from datetime import timezone
-from parsers import make_task_hash
+from hashing import make_task_hash
 
 
 def migrate_tasks(parent_directory:str = '~/Obsidian'):
@@ -37,12 +37,14 @@ def migrate_tasks(parent_directory:str = '~/Obsidian'):
 	if not tasks_from_markdown_files:
 		# Nothing to do
 		print(f"There are no tasks to migrate.  Call to find_tasks results in: {str(tasks_from_markdown_files)}")
+		return
 
 	# Get the current list of tasks from the todoist API  This will help ensure we don't duplicate tasks
 	todoist_api_token = todoist.get_api_token()
 	todoist_tasks = todoist.get_todoist_tasks(todoist_api_token=todoist_api_token)
 
 	recently_modified_files = [] #Tracks files that were modified by current invocation.  To not-skip due to modify time.
+
 
 	for task_dict in tasks_from_markdown_files:
 

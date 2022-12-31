@@ -1,7 +1,7 @@
 # Use Case
-If you want to be able to create To-Do items in markdown syntax in your note files (e.g. Notes created with [Obsidian](https://obsidian.md/)), but have those materialize in [Todoist](https://todoist.com/) then this package is for you.
+If you want to be able to create To-Do items in Markdown syntax in your note files (e.g. Notes created with [Obsidian](https://obsidian.md/)), but have those materialize in [Todoist](https://todoist.com/) then this package is for you.
 
-In other words:  Type away, making your notes fast an furiously.  When a To-do item pops into your mind, no need to switch apps, just make your To-do item in your markdown file and stay in the zone.
+In other words:  Type away, making your notes fast and furiously.  When a To-do item pops into your mind, no need to switch apps, just make your To-do item in your markdown file and stay in the zone.
 
 After trying it out, if you feel the urge, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801) ☕️ ☕️ ☕️
 
@@ -35,7 +35,7 @@ The notion comes from the [GTD Method](https://todoist.com/productivity-methods/
 At a high level, here's what happens:
 
 1. When invoked, the tool traverses a directory (e.g. Obsidian Vault Directory) looking for Markdown files with a `.md` file extension.
-2. These files are inspected for *Incomplete* To-Do items using regular expression pattern matching matching looking for To-Do's that look like:  `- [ ] Buy Milk`
+2. These files are inspected for *Incomplete* To-Do items using regular expression pattern matching, looking for To-Do's that look like:  `- [ ] Buy Milk`
 3. Any To-Do items are "migrated" to Todoist
 	- There is a basic check on file timestamp to try to ensure that To-Do items that are still being typed out aren't migrated into Todoist prematurely.
 	- There is a basic check to try to avoid edge cases where a to-do with the same wording in different places would be created in Todoist more than once
@@ -61,9 +61,9 @@ This tool was created on a Mac using Python3 (version 3.11).  It was tested on t
 Clone or Download and Extract the code from the repository to your preferred destination. `~/scripts` is a good spot if you're not sure where else to put it.
 
 ### Set up Python Virtual Environment or Manually Install Required Packages
-The `make_pyenv_venv.sh` script does it's best to bootstrap a Python Virtual Environment using `pyenv virtualenv` (more on that [here](https://realpython.com/intro-to-pyenv/#virtual-environments-and-pyenv)) with the requirements from `requirements.txt` installed.  You can run this script if you'd like to use that sort of setup.
+The `make_pyenv_venv.sh` script does its best to bootstrap a Python Virtual Environment using `pyenv virtualenv` (more on that [here](https://realpython.com/intro-to-pyenv/#virtual-environments-and-pyenv)) with the requirements from `requirements.txt` installed.  You can run this script if you'd like to use that sort of setup.
 
-If you'd like to avoid pyenv some reason, all that is really needed at the end of the day is a Python installation with [todoist-api-python](https://pypi.org/project/todoist-api-python/) installed so this command might be all you need:
+If you'd like to avoid pyenv some reason, all that is really needed at the end of the day is a Python installation with [todoist-api-python](https://pypi.org/project/todoist-api-python/) and whatever else is in `requirements.txt` installed, so this command might be all you need:
 
 ```bash
 pip install -U -r requirements.txt
@@ -113,10 +113,30 @@ Alternatively, you can use the wrapper script that's intended to place nicely wi
 ./migrate.sh
 ```
 
+# To Exclude Specific files from To-Do Migration
+If you want to exempt a specific file from having its to-do items migrated to Todoist, simply specify `todoist: false` in the YAML front matter at the top of the file.  
+
+For Example, a Packing list template for trips might look like the below.  It's a checklist, but you might not want to actually make To-do items for everything in that template:
+
+```yaml
+---
+tags:
+  - Template
+  - Travel
+todoist: false
+---
+# Daily Clothing
+
+- [ ] Shoes
+- [ ] Socks
+- [ ] Pants
+- [ ] Shorts
+```
+
 # Automation
 
-### On MacOS or Linux
-You can automate `migrate_tasks.py` on MacOS (Or anything **\*nix**) using a `cron` entry.  This set up is out of scope to describe here, but for the unfamiliar [here is a good place to start](https://www.howtogeek.com/101288/how-to-schedule-tasks-on-linux-an-introduction-to-crontab-files/).  As an example, you might make a `crontab` entry like this:
+### On macOS or Linux
+You can automate `migrate_tasks.py` on macOS (Or anything **\*nix**) using a `cron` entry.  This set up is out of scope to describe here, but for the unfamiliar [here is a good place to start](https://www.howtogeek.com/101288/how-to-schedule-tasks-on-linux-an-introduction-to-crontab-files/).  As an example, you might make a `crontab` entry like this:
 
 ```bash
 # Parse to-do items out of Markdown files and create corresponding to-do's in Todoist
@@ -126,16 +146,16 @@ You can automate `migrate_tasks.py` on MacOS (Or anything **\*nix**) using a `cr
 You can use [this website](https://crontab.guru/) to help generate and validate your crontab schedules
 
 ### On Windows
-As mentioned above, this script hasn't been tested on Windows, but should work without requiring too much (or any) fixing.  On Windows, instead of cron, you'd want to use the [Windows Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10), the set up for which is out of scope to describe here.
+As mentioned above, this script hasn't been tested on Windows, but should work without requiring too much (or any) fixing.  On Windows, instead of cron, you'd want to use the [Windows Task Scheduler](https://www.windowscentral.com/how-create-automated-task-using-task-scheduler-windows-10), the set-up for which is out of scope to describe here.
 
 # About synchronization
 
 ### Synchronization should just work
 If you've set up any kind of Synchronization for your Markdown notes ([Obsidian Sync](https://obsidian.md/sync), [Dropbox](https://www.dropbox.com/), [Syncthing](https://syncthing.net/), etc), this tool should, in-theory, work without any issue, but please let [Adam Reese](https://github.com/areese801) know and/or fix it yourself and create a pull request if you encounter any issues.
 
-This was tested with Obsidian Sync and it worked fine.
+This was tested with Obsidian Sync, and it worked fine.
 
-### Ok, but why "should" it just work?
+### Ok, but why "should it just work"?
 When a task is "migrated", this tool modifies the markdown file that that task was parsed from on-the-fly.
 
 So a task that looks like this, pre-migration:
@@ -161,6 +181,6 @@ Here's what the generated task in Todoist Looks like:
 
 # Did you save time or money by using this tool? ⏱️ 💰 ⏱️ 💰 
 
-If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801) 
+If so, you can [Buy Me a Coffee](https://www.buymeacoffee.com/areese801) 
 
 ☕️ ☕️ ☕️

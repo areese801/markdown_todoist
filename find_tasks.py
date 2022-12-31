@@ -9,7 +9,8 @@ import socket
 import uuid
 
 from config import _read_base_dir_from_config
-from parsers import parse_strings
+from parsers import parse_tasks_from_strings
+from parsers import get_todoist_front_matter_setting
 
 
 def _find_tasks_in_file(file_name: str) -> list | None:
@@ -25,7 +26,7 @@ def _find_tasks_in_file(file_name: str) -> list | None:
         data_string = f.read()
 
     # Parse each of the lines from the string for to-do items
-    tasks = parse_strings(input_data=data_string)
+    tasks = parse_tasks_from_strings(input_data=data_string)
 
     # Exit if we didn't find anything in the file
     if tasks is None:
@@ -73,8 +74,6 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
         file_ext: a string or list of file extensions to parse for to-do items within
     Returns: A dict describing all found matches
     """
-
-
 
     """
     Handle parent directory
@@ -136,15 +135,21 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
             # Found a file extension match.  Parse for to-do items
             if file_ext_match is True:
                 long_file_name = os.path.join(root, short_file_name)
+                # print(f"Inspecting file: {long_file_name}")
 
-                # print(f"Inspecting file for To-Do items:  {long_file_name}")
+                # Does the frontmatter in the file indicate we should not parse for to-do items?
+                todoist_frontmatter_setting = get_todoist_front_matter_setting(input_string=long_file_name)
+                if todoist_frontmatter_setting is False:
+                    print(f"\nSkipping over file '{long_file_name}' due to todoist frontmatter setting value: "
+                          f"[{todoist_frontmatter_setting}].")
+                    continue
 
                 tasks_from_file = _find_tasks_in_file(file_name=long_file_name)
 
                 if tasks_from_file is not None:
                     all_todo_items.extend(tasks_from_file)
 
-    # Return the payload of all of the sweet, sweet to-do items's we found
+    # Return the payload of all the sweet, sweet to-do items we found
     if len(all_todo_items) > 0:
         ret_val = all_todo_items
     else:
@@ -153,16 +158,13 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
     return ret_val
 
 
-
 if __name__ == '__main__':
-
     # Resolve the path to the vault.  If it's not passed in, get it from the config file
     args = sys.argv
     if len(args) >= 2:
         base_dir = args[1]
     else:
         base_dir = _read_base_dir_from_config()
-
 
     todo_items = find_tasks(parent_directory=base_dir)
 

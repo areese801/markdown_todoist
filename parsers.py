@@ -4,39 +4,14 @@ String parsing functions to drive the main program
 
 import re
 import sys
-import hashlib
 
-def make_task_hash(task_description: str):
-    """
-    A helper function that returns a hash of a task after applying some basic transformations
-    to the input string to try to handle for leading / trailing spaces, dropping punctuation and the like.
-
-    The idea here is if I make a task "feed dog:", then change that same tasks wording to "Feed Dog" that
-    we could use this function to understand that those two things are the same task.
-
-    Definitely not perfect and it kind of is what it is. Good enough for who it's for, but don't make any important life
-    decisions based on it's output.
-
-    Of course, these sort of tests could become more complex if needed we could involve a database or a Levenshtein
-    distance test or NLP or whatever (If you're reading this and care to contribute via a pull request, please do!).
-    But for now, the worst case is some 'duplicated' tasks might make their way into todoist if they were sufficiently
-    re-worded in Obsidian in a short enough period of time.   Meh.
-
-    Args:
-        task_description:  The task to return a hash for.  Just the task part, not the markdown part
-        Otherwise you'll get different digests out of this function
-
-    Returns:
-
-    """
-
-    task_description_for_hash = re.sub(r'[^a-z0-9]', '', task_description.strip().lower()) # Keep numbers and letters, lowercased
-    task_md5_hash = hashlib.md5(bytes(str(f"{task_description_for_hash}"),encoding='utf-8')).hexdigest() # Then, hash those
-
-    return task_md5_hash
+from hashing import make_task_hash
+import os
+import frontmatter
+from yaml import parser as yaml_parser
 
 
-def parse_strings(input_data: str | list) -> list | None:
+def parse_tasks_from_strings(input_data: str | list) -> list | None:
     """
     Parses each line in a string to parse_line (singular) and returns each of the matches
     Args:
@@ -48,20 +23,20 @@ def parse_strings(input_data: str | list) -> list | None:
     Validate the type of the input
     """
     if type(input_data) not in [str, list]:
-        raise TypeError (f"Error.  Expected a string or list of strings.  Got {type(input_data)}")
+        raise TypeError(f"Error.  Expected a string or list of strings.  Got {type(input_data)}")
 
     # Split string to list as needed
     if type(input_data) is str:
         input_data = input_data.split('\n')
 
-    all_todos = [] #Running list of To-do items
+    all_todos = []  # Running list of To-do items
     for line in input_data:
 
         # Short circuit of the line is an empty string
         if line.strip() == "":
             continue
 
-        todo_match = _parse_string(input_string=line)
+        todo_match = _parse_task_from_string(input_string=line)
 
         if todo_match is None:
             continue
@@ -74,7 +49,8 @@ def parse_strings(input_data: str | list) -> list | None:
     else:
         return None
 
-def _parse_string(input_string:str) -> dict | str:
+
+def _parse_task_from_string(input_string: str) -> dict | str:
     """
     Uses regex against a line of text to seek an incomplete to-do item
     The line of text should be a single line.  An exception will be thrown if it is not
@@ -126,20 +102,99 @@ def _parse_string(input_string:str) -> dict | str:
         for c in drop_chars:
             task_part = task_part.replace(c, '')
 
-        # TODO:  Driop these lines.  moved into standalone function
-        # task_description_for_hash = re.sub(r'[^a-z0-9]', '', task_part.lower()) # Keep numbers and letters, lowercased
-        # task_md5_hash = hashlib.md5(bytes(str(f"{task_description_for_hash}"),encoding='utf-8')).hexdigest()
-
         task_md5_hash = make_task_hash(task_description=task_part)
 
-        ret_val =  dict(markdown_part=markdown_part,
-                        task=task_part,
-                        task_md5_hash=task_md5_hash,
-                        original_string=original_string)
+        ret_val = dict(markdown_part=markdown_part,
+                       task=task_part,
+                       task_md5_hash=task_md5_hash,
+                       original_string=original_string)
     else:
         ret_val = None
 
-    return ret_val  # If same task description (task_name_id_part) in file >1x, it will be duplicated here.  Handle for dups downstream
+    # TODO: If same task in file >1x, it might be duplicated here.  Handle for duplicates downstream
+    return ret_val
+
+
+def parse_frontmatter(input_string: str) -> frontmatter.Post:
+    """
+    Parses front matter from a file or string
+    Args:
+        input_string: A fully qualified file path or a string
+
+    Returns:
+    """
+
+    # Is input_string a file?
+    if os.path.isfile(input_string):
+        with open(input_string, 'r') as f:
+            input_string = f.read()
+    try:
+        """
+        Note:  Frontmatter fails when trying to parse frontmatter that looks like the below (Obsidian Template Variables):
+        It raises yaml.parser.ParserError
+        
+        ---
+        tags:
+          - {{date}}
+          - {{date:YYYY}}-MM-DD
+          - {{date:MMMM}}
+          - {{date:dddd}}
+          - WorkWeek{{date:ww}}
+          - DailyNote
+        publish: false
+        ---
+        """
+
+        ret_val = frontmatter.loads(text=input_string, encoding='utf-8')
+    except yaml_parser.ParserError as ex:
+        # print(f"Got Exception of type {type(ex)} while trying to parse the input below.  "
+        #       f"Continuing: \n{input_string}", file=sys.stderr)
+        # print(ex, file=sys.stderr)
+        ret_val = None
 
 
 
+    return ret_val
+
+
+def get_todoist_front_matter_setting(input_string:str):
+    """
+    Parses the todoist property from the frontmatter of a string or file that that string is the path for
+
+    This is used to disallow specific notes (e.g. Packing list Template) from having parsed To-do's migrated to Todoist
+
+    Args:
+        input_string: A fully qualified file path or a string
+
+    Returns: A Boolean flag, defaulting to True where no setting is found.
+    Raises: Value error if the 'todoist' key is supplied in the frontmatter with any value other than 'true' or 'false'
+    """
+
+    fm = parse_frontmatter(input_string=input_string)
+
+    ret_val = None
+    if fm is None:
+        # This might happen due to the try block in parse_frontmatter.  Move on with life
+        return ret_val
+    elif type(fm) is not frontmatter.Post:
+        print(f"The resulting object was not of type {type(frontmatter.Post)}, which is unexpected.  Continuing.",
+              file=sys.stderr)
+        return ret_val
+    elif not hasattr(fm, 'metadata'):
+        print(f"The resulting object of type {type(frontmatter.Post)} does not have a 'metadata' attribute, which is "
+              f"unexpected.  Continuing.", file=sys.stderr)
+        return ret_val
+
+    metadata = fm.metadata  # This is a dict
+    todoist = metadata.get('todoist')
+
+    if todoist is None:
+        ret_val = True
+    elif todoist is False:
+        ret_val = False  # Expected when frontmatter explicitly contains 'todoist: false'
+    elif todoist is True:
+        ret_val = True   # Not necessary to supply, but this is when the frontmatter explicitly contains 'todoist: true'
+    else:
+        raise ValueError(f"Could not parse 'todoist' setting front matter.  There is no handling.  "
+                         f"Got value '{todoist}', which is of type {type(todoist)} from the input: \n {input_string}")
+    return ret_val
