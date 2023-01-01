@@ -140,8 +140,8 @@ def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md'
                 # Does the frontmatter in the file indicate we should not parse for to-do items?
                 todoist_frontmatter_setting = get_todoist_front_matter_setting(input_string=long_file_name)
                 if todoist_frontmatter_setting is False:
-                    print(f"\nSkipping over file '{long_file_name}' due to todoist frontmatter setting value: "
-                          f"[{todoist_frontmatter_setting}].")
+                    # print(f"\nSkipping over file '{long_file_name}' due to todoist frontmatter setting value: "
+                    #       f"[{todoist_frontmatter_setting}].")
                     continue
 
                 tasks_from_file = _find_tasks_in_file(file_name=long_file_name)
