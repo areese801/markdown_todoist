@@ -11,7 +11,7 @@ import frontmatter
 from yaml import parser as yaml_parser
 
 
-def parse_tasks_from_strings(input_data: str | list) -> list | None:
+def parse_tasks_from_strings(input_data):
     """
     Parses each line in a string to parse_line (singular) and returns each of the matches
     Args:
@@ -50,7 +50,7 @@ def parse_tasks_from_strings(input_data: str | list) -> list | None:
         return None
 
 
-def _parse_task_from_string(input_string: str) -> dict | str:
+def _parse_task_from_string(input_string: str):
     """
     Uses regex against a line of text to seek an incomplete to-do item
     The line of text should be a single line.  An exception will be thrown if it is not
