@@ -31,3 +31,6 @@ todoist_api_config.json
 # Ignore config.json.  Users sould refer to config_TEMPLATE.json
 # to make their own config.json
 config.json
+
+# Ignore Log files
+*.log
