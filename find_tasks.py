@@ -13,7 +13,7 @@ from parsers import parse_tasks_from_strings
 from parsers import get_todoist_front_matter_setting
 
 
-def _find_tasks_in_file(file_name: str) -> list | None:
+def _find_tasks_in_file(file_name: str):
     """
 
     Args:
@@ -65,7 +65,7 @@ def _find_tasks_in_file(file_name: str) -> list | None:
 
     return tasks
 
-def find_tasks(parent_directory:str = '~/Obsidian', file_ext: list | str = '.md') -> dict:
+def find_tasks(parent_directory:str = '~/Obsidian', file_ext= ".md") -> dict:
     """
     Recurses over a directory and any subdirectories found within looking for files with the
     extension(s) defined in the file_ext argument.  These are parsed for to-do items
