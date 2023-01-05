@@ -14,6 +14,29 @@
 	    }
 
 thisDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+thisProgramNoExtension=${0%.*}
+
+## Do a check on the pid from the last time this program was run, to make sure we don't step on our own toes
+	pidFileNameShort=${thisProgramNoExtension}.pid
+	pidFileName="${thisDir}/${pidFileNameShort}"
+	touch ${pidFileName}
+	lastPID=$(< ${pidFileName})
+	thisPID=$$
+
+	## Bail out if lastPID is still running 
+	if [[ ! -z "${lastPID}" ]] && [[ $(ps ${lastPID} | wc -l) -ne 1 ]]  # wc still returns 1 line if the process doesn't exist (headers)
+	then
+		echo "The previous pid [${lastPID}] is still running.  The program will exit."
+		exit
+	else
+		echo "${thisPID}" > ${pidFileName}
+	fi
+
+echo "thisProgramNoExtension = ${thisProgramNoExtension}"
+echo "pidFileNameShort = ${pidFileNameShort}"
+echo "pidFileName = ${pidFileName}"
+
+
 
 ## Resolve Python and Pip Executables
 	whichPython=$(which python)
@@ -68,4 +91,5 @@ thisDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 	program="${thisDir}/migrate_tasks.py"
 
 	${pythonToUse} ${program}
+
 
