@@ -34,3 +34,6 @@ config.json
 
 # Ignore Log files
 *.log
+
+# Ignore .pid files.  These are used in .sh scripts to make sure duplicate instances of the same script don't start.
+*.pid

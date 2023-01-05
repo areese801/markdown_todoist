@@ -50,7 +50,7 @@ thisDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 		echo "Can't tell which Pip to use.  Please install the latest version of Pip"
 		exit 1
 	else
-		# Prefer 'pip3' binary over 'ppip'
+		# Prefer 'pip3' binary over 'pip'
 		if [[ ! -z "${whichPip3}" ]]
 			then
 				pipToUse=${whichPip3}
