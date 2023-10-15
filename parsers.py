@@ -13,7 +13,7 @@ from yaml import parser as yaml_parser
 
 def parse_tasks_from_strings(input_data):
     """
-    Parses each line in a string to parse_line (singular) and returns each of the matches
+    Passes each line in a string to parse_line (singular) and returns each of the matches
     Args:
         input_data: A string or list of strings (e.g. Markdown Syntax).  May or may not be multiple lines of text
     Returns:  A list of dictionaries describing the matches or None, if none are found

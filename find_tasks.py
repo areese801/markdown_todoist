@@ -11,6 +11,7 @@ import uuid
 from config import _read_base_dir_from_config
 from parsers import parse_tasks_from_strings
 from parsers import get_todoist_front_matter_setting
+from helpers import resolve_vault_name
 
 
 def _find_tasks_in_file(file_name: str):
@@ -42,8 +43,13 @@ def _find_tasks_in_file(file_name: str):
     # Get note name from fully qualified path.  It's the short file name with the '.md' extension removed
     note_name = re.sub(pattern=r'.md$', repl='', string=os.path.basename(file_name))
 
+    # Resolve the Obsidian Vault name.  This allows us to use more of the methods in the Obsidian URI scheme
+    vault_name = resolve_vault_name(file_name=file_name)
+
     # Create Obsidian URI.  See:  https://help.obsidian.md/Advanced+topics/Using+obsidian+URI
-    obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"
+    # obsidian_uri = f"obsidian://open?path={urllib.parse.quote(file_name,safe='')}"  # Areese, 2023-09-27.  Commented out to match similar line from markdown_to_omnifocus
+    obsidian_uri = f"obsidian://open?vault={urllib.parse.quote(vault_name,safe='')}" \
+                   f"&file={urllib.parse.quote(note_name,safe='')}"
     file_name_escaped = file_name.replace(' ', '\ ')
 
     # Print some nice messages about what we found

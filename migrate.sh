@@ -36,8 +36,6 @@ echo "thisProgramNoExtension = ${thisProgramNoExtension}"
 echo "pidFileNameShort = ${pidFileNameShort}"
 echo "pidFileName = ${pidFileName}"
 
-
-
 ## Resolve Python and Pip Executables
 	whichPython=$(which python)
 	whichPython3=$(which python3)
@@ -73,7 +71,7 @@ echo "pidFileName = ${pidFileName}"
 		echo "Can't tell which Pip to use.  Please install the latest version of Pip"
 		exit 1
 	else
-		# Prefer 'pip3' binary over 'ppip'
+		# Prefer 'pip3' binary over 'pip'
 		if [[ ! -z "${whichPip3}" ]]
 			then
 				pipToUse=${whichPip3}
@@ -91,5 +89,3 @@ echo "pidFileName = ${pidFileName}"
 	program="${thisDir}/migrate_tasks.py"
 
 	${pythonToUse} ${program}
-
-
