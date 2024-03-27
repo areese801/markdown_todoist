@@ -12,6 +12,7 @@ from config import _read_base_dir_from_config
 from parsers import parse_tasks_from_strings
 from parsers import get_todoist_front_matter_setting
 from helpers import resolve_vault_name
+from helpers import running_on_wsl
 
 
 def _find_tasks_in_file(file_name: str):
